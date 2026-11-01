@@ -8,14 +8,14 @@ export type Mood = {
 };
 
 export const moods: Mood[] = [
-  { id: "signal", label: "Signal", c: ["#ff9f1c", "#0ea5a4", "#4f46e5"], accent: "#ffb52e" },
-  { id: "ember", label: "Ember", c: ["#ff4d2e", "#8a1fb0", "#ffb347"], accent: "#ff7a59" },
-  { id: "tide", label: "Tide", c: ["#19c2d8", "#2459ff", "#7be0c3"], accent: "#4fd1e8" },
-  { id: "orchid", label: "Orchid", c: ["#c04bff", "#ff4fa3", "#4a5bff"], accent: "#d98cff" },
-  { id: "moss", label: "Moss", c: ["#34d399", "#0b6e4f", "#d9f99d"], accent: "#6ee7a8" },
+  { id: "crimson", label: "Crimson", c: ["#d12b2b", "#6f0f18", "#ff8a4c"], accent: "#e5483d" },
+  { id: "ember", label: "Ember", c: ["#ff7a1a", "#a31d1d", "#ffd166"], accent: "#ff8a3d" },
+  { id: "gold", label: "Gold", c: ["#d9a13b", "#6b4a14", "#f5e3b3"], accent: "#e2b24f" },
+  { id: "ocean", label: "Ocean", c: ["#1fb5c9", "#1d4ed8", "#6ee7d4"], accent: "#4fc3d9" },
+  { id: "violet", label: "Violet", c: ["#a855f7", "#4c1d95", "#f472b6"], accent: "#b779f5" },
 ];
 
-export const BG_HEX = "#07080b";
+export const BG_HEX = "#0a0606";
 
 export function hexToRgb(hex: string): [number, number, number] {
   const n = parseInt(hex.slice(1), 16);

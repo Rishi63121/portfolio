@@ -4,28 +4,50 @@ import MoodPicker from "@/components/MoodPicker";
 import JunctionCanvas from "@/components/JunctionCanvas";
 import SignalLab from "@/components/SignalLab";
 import ScreeningDemo from "@/components/ScreeningDemo";
+import Parallax from "@/components/Parallax";
+import CountUp from "@/components/CountUp";
+import Icon, { type IconName } from "@/components/Icon";
+import Portrait from "@/components/Portrait";
+import QrCode from "@/components/QrCode";
+import Waves from "@/components/Waves";
 import { links, withBase } from "@/lib/site";
 
-const facts = [
-  { k: "9.12", v: "CGPA, B.E. CSE (2027)" },
-  { k: "1st", v: "Oxy-Hack, 18-hour hackathon" },
-  { k: "2nd", v: "HackSetu at TATVA'26" },
-  { k: "IEEE", v: "Xplore publication, 2025" },
+const ticker = ["Python", "FastAPI", "React", "Spring Boot", "PostgreSQL", "scikit-learn", "SQLAlchemy", "JWT", "Node.js", "Tailwind", "AWS", "Postman"];
+
+const stats = [
+  { v: 9.12, d: 2, l: "CGPA", icon: "cap" as IconName },
+  { v: 2, d: 0, l: "Flagship systems", icon: "layers" as IconName },
+  { v: 2, d: 0, l: "Hackathon podiums", icon: "trophy" as IconName },
 ];
 
-const ticker = [
-  "Python", "FastAPI", "React", "Spring Boot", "PostgreSQL", "scikit-learn",
-  "SQLAlchemy", "JWT", "Node.js", "Tailwind", "AWS", "Postman",
+const whatIDo: { icon: IconName; t: string; d: string }[] = [
+  { icon: "server", t: "APIs & Backend", d: "REST APIs with FastAPI, Flask and Node.js, SQLAlchemy models and JWT authentication." },
+  { icon: "chip", t: "AI & ML Services", d: "Model training and evaluation, computer vision, emotion classification with scikit-learn." },
+  { icon: "layout", t: "Full-stack Apps", d: "React dashboards, Tailwind CSS and Streamlit apps wired to real backends." },
+  { icon: "database", t: "Databases", d: "PostgreSQL, SQLite and SQL: schemas, queries and the data behind the dashboards." },
+  { icon: "cloud", t: "Cloud & Tooling", d: "AWS, Git, GitHub and Postman for building, testing and shipping." },
 ];
 
-const stack = [
-  { group: "AI & ML", items: ["Machine Learning", "scikit-learn", "Computer Vision", "Emotion Classification", "Model Evaluation", "Data Preprocessing"] },
-  { group: "Backend", items: ["Python", "FastAPI", "Flask", "Node.js", "REST APIs", "SQLAlchemy", "JWT Auth"] },
-  { group: "Frontend", items: ["React.js", "Tailwind CSS", "HTML", "CSS", "Streamlit"] },
-  { group: "Data", items: ["PostgreSQL", "SQLite", "SQL"] },
-  { group: "Languages", items: ["Python", "Java", "C++", "JavaScript"] },
-  { group: "Tools & Cloud", items: ["AWS", "Git", "GitHub", "Postman"] },
+const process: { icon: IconName; t: string; d: string }[] = [
+  { icon: "search", t: "Discover", d: "Research the domain and the APIs involved before writing code." },
+  { icon: "schema", t: "Define", d: "Model the data and design clean, well-named REST endpoints." },
+  { icon: "code", t: "Build", d: "FastAPI and Spring Boot services with JWT auth, backed by PostgreSQL." },
+  { icon: "spark", t: "Integrate ML", d: "Train and serve models behind a dedicated FastAPI service." },
+  { icon: "check", t: "Test & document", d: "Validate every endpoint in Postman and document how it works." },
 ];
+
+const tools = [
+  { n: "Python", m: "Py" },
+  { n: "FastAPI", m: "Fa" },
+  { n: "React", m: "Re" },
+  { n: "PostgreSQL", m: "Pg" },
+  { n: "scikit-learn", m: "Sk" },
+  { n: "AWS", m: "AWS" },
+  { n: "Git", m: "Git" },
+  { n: "Postman", m: "Pm" },
+];
+
+const alsoUse = ["Flask", "Node.js", "SQLAlchemy", "JWT", "Streamlit", "SQLite", "Java", "C++", "JavaScript", "Computer Vision", "Emotion Classification", "Data Preprocessing"];
 
 const recognition = [
   { tag: "1st place", title: "Oxy-Hack, 18-hour hackathon", where: "The Oxford College of Engineering" },
@@ -41,131 +63,203 @@ const pipeline = [
   { name: "Resume parsed", w: 0.9 },
   { name: "Skills matched", w: 0.72 },
   { name: "Fit scored", w: 0.85 },
-  { name: "Questions generated", w: 0.6 },
+  { name: "Questions ready", w: 0.6 },
 ];
 
-function Section({ id, eyebrow, title, children }: { id: string; eyebrow: string; title: React.ReactNode; children: React.ReactNode }) {
-  return (
-    <section id={id} className="mx-auto max-w-6xl px-5 py-24 sm:py-32">
-      <div className="reveal max-w-3xl">
-        <p className="eyebrow">{eyebrow}</p>
-        <h2 className="display mt-4 text-3xl sm:text-5xl">{title}</h2>
-      </div>
-      <div className="mt-14">{children}</div>
-    </section>
-  );
+function PanelTitle({ children }: { children: React.ReactNode }) {
+  return <h2 className="panel-title text-text">{children}</h2>;
 }
 
 function Arrow() {
   return (
-    <span aria-hidden className="font-mono text-faint">
+    <span aria-hidden className="font-mono">
       →
     </span>
   );
 }
 
-function Demo({ label, children }: { label: string; children: React.ReactNode }) {
+function WorkTile({ title, kind, href, children }: { title: string; kind: string; href?: string; children: React.ReactNode }) {
   return (
-    <details className="group mt-8">
-      <summary className="glass inline-flex items-center gap-3 rounded-full px-5 py-3 text-sm font-medium transition-colors hover:bg-text/10">
+    <article className="reveal">
+      <div className="tile relative aspect-[16/10] overflow-hidden rounded-[3px]">{children}</div>
+      <div className="mt-3 flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-[0.82rem] font-semibold uppercase tracking-wide text-text">{title}</h3>
+          <p className="mt-0.5 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-faint">{kind}</p>
+        </div>
+        {href && (
+          <a href={href} target="_blank" rel="noopener noreferrer" className="shrink-0 text-xs font-medium text-accent hover:underline">
+            GitHub <Arrow />
+          </a>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function Lab({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <details className="group">
+      <summary className="glass inline-flex items-center gap-3 rounded-full px-5 py-3 text-sm font-medium transition-colors hover:border-accent">
         <span aria-hidden className="plus grid size-5 place-items-center rounded-full bg-accent text-base leading-none text-accent-ink transition-transform">
           +
         </span>
         {label}
       </summary>
-      <div className="mt-6">{children}</div>
+      <div className="mt-5">{children}</div>
     </details>
   );
 }
 
-function Tile({ kind, title, sub, href, children }: { kind: string; title: string; sub: string; href: string; children: React.ReactNode }) {
-  return (
-    <div className="relative isolate aspect-[4/3] overflow-hidden rounded-[28px] border border-line bg-surface sm:aspect-[21/9]">
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-20 bg-[radial-gradient(70%_90%_at_85%_10%,var(--m2),transparent_70%),radial-gradient(60%_80%_at_10%_100%,var(--m1),transparent_70%)] opacity-35"
-      />
-      <div className="absolute inset-0 -z-10">{children}</div>
-      <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,oklch(0.1_0.01_255/0.85)_6%,transparent_55%)]" />
-      <div className="flex h-full flex-col justify-between p-5 sm:p-8">
-        <div className="flex items-start justify-between gap-3">
-          <span className="glass rounded-full px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">{kind}</span>
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="glass flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-colors hover:bg-text/15"
-          >
-            GitHub <Arrow />
-          </a>
-        </div>
-        <div>
-          <h3 className="display text-4xl sm:text-6xl">{title}</h3>
-          <p className="mt-1 text-base text-muted sm:text-lg">{sub}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Home() {
+  const giant = "PORTFOLIO".split("");
+
   return (
     <>
       <Header />
       <main id="top">
         {/* HERO */}
-        <section className="relative isolate overflow-hidden">
-          <div
-            aria-hidden
-            className="absolute inset-0 -z-30 bg-[radial-gradient(80%_60%_at_50%_30%,var(--m2),transparent_70%),radial-gradient(60%_50%_at_20%_70%,var(--m1),transparent_70%)] opacity-40"
-          />
-          <div className="absolute inset-0 -z-30">
-            <AuroraShader />
-          </div>
-          <div aria-hidden className="grain absolute inset-0 -z-20" />
-          <div
-            aria-hidden
-            className="absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_50%_44%,oklch(0.12_0.01_255/0.42),transparent_78%),linear-gradient(to_bottom,transparent_72%,var(--bg))]"
-          />
+        <Parallax>
+          <section className="relative isolate overflow-hidden">
+            <div
+              aria-hidden
+              className="absolute inset-0 -z-30 bg-[radial-gradient(70%_55%_at_70%_30%,var(--m2),transparent_70%),radial-gradient(50%_50%_at_20%_80%,var(--m1),transparent_70%)] opacity-45"
+            />
+            <div className="absolute inset-0 -z-30 opacity-55 [mask-image:linear-gradient(to_bottom,black_55%,transparent)]">
+              <AuroraShader />
+            </div>
+            <div aria-hidden className="grain absolute inset-0 -z-20" />
+            <div
+              aria-hidden
+              className="absolute inset-0 -z-10 bg-[radial-gradient(75%_65%_at_50%_35%,transparent,rgb(10_6_6/0.78)_85%),linear-gradient(to_bottom,transparent_70%,var(--bg))]"
+            />
 
-          <div className="mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-5 pb-24 pt-32 text-center">
-            <p className="enter glass flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-xs uppercase tracking-[0.14em] text-muted" style={{ "--i": 0 } as React.CSSProperties}>
-              <span aria-hidden className="size-1.5 rounded-full bg-go" />
-              Computer Science · Class of 2027
-            </p>
-            <h1 className="enter mt-8 max-w-4xl" style={{ "--i": 1 } as React.CSSProperties}>
-              <span className="block text-lg font-medium tracking-[0.02em] text-muted sm:text-xl">Rishi Roy</span>
-              <span className="display mt-4 block text-[clamp(2.25rem,5vw,4.25rem)] leading-[1.05]">
-                Backend and AI systems that turn data into{" "}
-                <span className="grad font-serif font-normal italic tracking-normal">decisions.</span>
-              </span>
-            </h1>
-            <p className="enter mt-8 max-w-xl text-lg leading-relaxed text-muted sm:text-xl" style={{ "--i": 2 } as React.CSSProperties}>
-              Computer Science student focused on REST APIs, machine learning services and full-stack applications,
-              from the database to the dashboard.
-            </p>
-            <div className="enter mt-10 flex flex-wrap items-center justify-center gap-3" style={{ "--i": 3 } as React.CSSProperties}>
-              <a href="#work" className="rounded-full bg-text px-7 py-3.5 text-sm font-medium text-bg transition-transform hover:-translate-y-0.5">
-                See the work →
-              </a>
-              <a href={withBase(links.resume)} className="glass rounded-full px-7 py-3.5 text-sm font-medium transition-colors hover:bg-text/15">
-                Download resume
-              </a>
+            <div className="mx-auto max-w-6xl px-5 pb-20 pt-24 sm:pt-28">
+              <div className="enter flex items-center gap-4 font-mono text-[0.64rem] uppercase tracking-[0.24em] text-faint sm:text-[0.7rem]" style={{ "--i": 0 } as React.CSSProperties}>
+                <span>Portfolio 2026</span>
+                <span aria-hidden className="h-px flex-1 bg-line-strong" />
+                <span className="flex items-center gap-2">
+                  <span className="hidden sm:inline">Computer Science ·</span> Class of 2027
+                  <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+                </span>
+              </div>
+
+              <h1 className="cond relative z-10 mt-5 select-none whitespace-nowrap text-center text-[min(19.6vw,17.6rem)] leading-[0.84] tracking-[-0.005em] text-text">
+                <span className="sr-only">Rishi Roy, Backend and AI/ML Developer</span>
+                <span aria-hidden>
+                  {giant.map((c, i) => (
+                    <span key={i} className="letter" style={{ "--i": i } as React.CSSProperties}>
+                      {c}
+                    </span>
+                  ))}
+                </span>
+              </h1>
+
+              <div className="relative mt-4 grid gap-10 lg:grid-cols-[1fr_1.15fr_1fr] lg:items-start lg:gap-6">
+                {/* left: positioning + quote */}
+                <div className="enter order-3 lg:order-1 lg:pt-14" style={{ "--i": 3 } as React.CSSProperties}>
+                  <p className="cond text-[clamp(2.2rem,4vw,3.4rem)] text-text">API / ML / Web</p>
+                  <ul className="mt-5 space-y-1.5 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-muted">
+                    <li>REST APIs</li>
+                    <li>ML services</li>
+                    <li>Dashboards</li>
+                  </ul>
+                  <div aria-hidden className="mt-5 h-0.5 w-9 bg-accent" />
+                  <div className="mt-9 flex gap-3">
+                    <span aria-hidden className="cond text-6xl leading-[0.7] text-accent">
+                      “
+                    </span>
+                    <p className="max-w-[15rem] text-sm uppercase leading-relaxed tracking-[0.14em] text-text/90">
+                      I build backends and ML services that turn data into decisions.
+                    </p>
+                  </div>
+                  <p aria-hidden className="sign mt-7 -rotate-3 text-3xl text-text/90">
+                    Rishi Roy
+                  </p>
+                </div>
+
+                {/* center: red circle + portrait slot */}
+                <div className="enter order-1 mx-auto aspect-square w-[min(82vw,27rem)] lg:order-2 lg:-mt-[min(8vw,7.5rem)]" style={{ "--i": 2 } as React.CSSProperties}>
+                  <div className="relative size-full">
+                    <div aria-hidden className="spin-slow absolute inset-0 rounded-full border border-dashed border-line-strong" />
+                    <div
+                      aria-hidden
+                      className="breathe absolute inset-[6%] rounded-full bg-[radial-gradient(circle_at_34%_28%,color-mix(in_srgb,var(--accent)_92%,#fff_8%),var(--m2)_78%)] shadow-[0_0_130px_-25px_var(--accent)]"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 top-[8%]" style={{ transform: "translate(calc(var(--px,0) * 12px), calc(var(--py,0) * 8px))" }}>
+                      <div className="float h-full">
+                        <Portrait />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* right: name + stats */}
+                <div className="enter relative z-20 order-2 lg:order-3" style={{ "--i": 4 } as React.CSSProperties}>
+                  <div aria-hidden className="absolute -top-10 right-0 hidden size-[7.5rem] text-text/90 lg:block">
+                    <svg viewBox="0 0 120 120" className="spin-slow size-full">
+                      <defs>
+                        <path id="ring" d="M60 60 m-45 0 a45 45 0 1 1 90 0 a45 45 0 1 1 -90 0" />
+                      </defs>
+                      <text fontSize="9.5" fill="currentColor" className="font-mono uppercase" letterSpacing="2.4">
+                        <textPath href="#ring" textLength="280">
+                          Backend • AI/ML • Full-stack • Python •
+                        </textPath>
+                      </text>
+                    </svg>
+                    <svg viewBox="0 0 100 100" className="absolute left-1/2 top-1/2 size-7 -translate-x-1/2 -translate-y-1/2 text-accent" fill="currentColor">
+                      <path d="M50 0 58 38 93 15 66 44 100 50 66 56 93 85 58 62 50 100 42 62 7 85 34 56 0 50 34 44 7 15 42 38Z" />
+                    </svg>
+                  </div>
+
+                  <p className="cond text-[clamp(2.8rem,5vw,4.4rem)] text-text">
+                    Rishi
+                    <br />
+                    Roy
+                  </p>
+                  <p className="mt-3 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-accent">Backend · AI/ML · Full-stack developer</p>
+                  <p className="mt-5 max-w-sm text-[0.95rem] leading-relaxed text-muted">
+                    Computer Science student who designs REST APIs, ML services and dashboards, from the database to the screen. Hackathon winner and IEEE Xplore author.
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-2.5">
+                    <a href="#work" className="rounded-full bg-text px-5 py-2.5 text-[0.8rem] font-semibold text-bg transition-transform hover:-translate-y-0.5">
+                      See the work →
+                    </a>
+                    <a href={withBase(links.resume)} className="glass rounded-full px-5 py-2.5 text-[0.8rem] font-semibold transition-colors hover:border-accent">
+                      Download resume
+                    </a>
+                  </div>
+                  <dl className="mt-8 grid grid-cols-3 gap-3 border-t border-line pt-6">
+                    {stats.map((s) => (
+                      <div key={s.l}>
+                        <span className="grid size-9 place-items-center rounded-full border border-line-strong text-accent">
+                          <Icon name={s.icon} size={17} />
+                        </span>
+                        <dt className="cond mt-3 text-3xl text-text sm:text-4xl">
+                          <CountUp value={s.v} decimals={s.d} />
+                        </dt>
+                        <dd className="mt-1 font-mono text-[0.6rem] uppercase leading-snug tracking-[0.16em] text-faint">{s.l}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              </div>
+
+              <div className="enter mt-14 flex flex-col items-center gap-3" style={{ "--i": 6 } as React.CSSProperties}>
+                <MoodPicker />
+                <p className="font-mono text-[0.68rem] text-faint">Pick a mood. Move your cursor through the colour.</p>
+              </div>
             </div>
-            <div className="enter mt-14 flex flex-col items-center gap-3" style={{ "--i": 4 } as React.CSSProperties}>
-              <MoodPicker />
-              <p className="font-mono text-xs text-faint">Pick a mood. Move your cursor through the colour.</p>
-            </div>
-          </div>
-        </section>
+          </section>
+        </Parallax>
 
         {/* TICKER */}
-        <div className="marquee overflow-hidden border-y border-line py-5" aria-label="Technologies I work with">
+        <div className="marquee overflow-hidden border-y border-line py-4" aria-label="Technologies I work with">
           <div className="marquee-track" aria-hidden>
             {[0, 1].map((n) => (
               <div key={n} className="flex shrink-0 items-center">
                 {ticker.map((t) => (
-                  <span key={`${n}-${t}`} className="flex items-center font-mono text-sm uppercase tracking-[0.14em] text-muted">
+                  <span key={`${n}-${t}`} className="flex items-center font-mono text-xs uppercase tracking-[0.24em] text-muted">
                     <span className="px-8">{t}</span>
                     <span className="text-accent">✦</span>
                   </span>
@@ -176,225 +270,310 @@ export default function Home() {
           <p className="sr-only">Python, FastAPI, React, Spring Boot, PostgreSQL, scikit-learn, SQLAlchemy, JWT, Node.js, Tailwind CSS, AWS, Postman</p>
         </div>
 
-        {/* FACTS */}
-        <section aria-label="Highlights">
-          <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-px px-5 md:grid-cols-4">
-            {facts.map((f) => (
-              <div key={f.k} className="reveal py-10 md:px-6 md:first:pl-0">
-                <dt className="display text-5xl text-accent sm:text-6xl">{f.k}</dt>
-                <dd className="mt-2 text-sm text-muted">{f.v}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
+        <div className="mx-auto max-w-6xl space-y-5 px-5 py-14 sm:py-20">
+          {/* WHAT I DO */}
+          <section aria-labelledby="what" className="frame reveal grid gap-6 p-6 sm:p-8 lg:grid-cols-[11rem_1fr]">
+            <h2 id="what" className="panel-title text-text">
+              What I do
+            </h2>
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              {whatIDo.map((w) => (
+                <li key={w.t} className="mini rounded-[3px] p-4">
+                  <span className="text-accent">
+                    <Icon name={w.icon} size={26} />
+                  </span>
+                  <h3 className="mt-5 text-[0.74rem] font-semibold uppercase tracking-wide text-text">{w.t}</h3>
+                  <p className="mt-2 text-[0.78rem] leading-relaxed text-muted">{w.d}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-        {/* WORK */}
-        <Section
-          id="work"
-          eyebrow="Selected work"
-          title={
-            <>
-              Two systems, built end to end,
-              <span className="font-serif font-normal italic tracking-normal text-muted"> and you can poke both.</span>
-            </>
-          }
-        >
-          <div className="space-y-28">
-            {/* SAHAJ */}
-            <article className="reveal">
-              <Tile kind="Traffic intelligence · 3-tier" title="SAHAJ" sub="Smart Adaptive Highway & Junction" href={links.sahaj}>
-                <JunctionCanvas />
-              </Tile>
-              <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
-                <ul className="space-y-4 text-lg leading-relaxed text-muted">
-                  <li>
-                    A full-stack crowd and traffic management system that predicts real-time crowd severity levels to
-                    coordinate traffic signals.
+          {/* PROCESS + FEATURED */}
+          <section id="work" className="frame reveal grid lg:grid-cols-[0.78fr_1.5fr]">
+            <div className="border-b border-line p-6 sm:p-8 lg:border-b-0 lg:border-r">
+              <PanelTitle>How I build</PanelTitle>
+              <ol className="mt-8 space-y-6">
+                {process.map((p, i) => (
+                  <li key={p.t} className="flex items-start gap-4">
+                    <span className="cond w-9 shrink-0 text-3xl text-accent">0{i + 1}</span>
+                    <span aria-hidden className="mt-0.5 hidden size-11 shrink-0 place-items-center rounded-full border border-line-strong text-text/90 sm:grid">
+                      <Icon name={p.icon} size={19} />
+                    </span>
+                    <div>
+                      <h3 className="text-[0.78rem] font-semibold uppercase tracking-wide text-text">{p.t}</h3>
+                      <p className="mt-1 text-[0.8rem] leading-relaxed text-muted">{p.d}</p>
+                    </div>
                   </li>
-                  <li>
-                    3-tier architecture: Spring Boot for backend services, FastAPI for a dedicated ML service, React.js
-                    for visualisation.
-                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="p-6 sm:p-8">
+              <div className="flex items-start justify-between gap-4">
+                <PanelTitle>Featured work</PanelTitle>
+                <a href={links.github} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-accent hover:underline">
+                  View more projects <Arrow />
+                </a>
+              </div>
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <WorkTile title="SAHAJ" kind="Traffic intelligence · 3-tier" href={links.sahaj}>
+                  <div aria-hidden className="absolute inset-0 bg-[radial-gradient(70%_80%_at_80%_10%,var(--m2),transparent_70%)] opacity-60" />
+                  <JunctionCanvas />
+                </WorkTile>
+                <WorkTile title="TalentAI HRMS" kind="AI-powered HR platform" href={links.talentai}>
+                  <div aria-hidden className="absolute inset-0 bg-[radial-gradient(70%_80%_at_20%_100%,var(--m2),transparent_70%)] opacity-60" />
+                  <div className="absolute inset-0 grid place-items-center p-4">
+                    <div
+                      className="grid w-full grid-cols-2 gap-2"
+                      role="img"
+                      aria-label="Illustrative screening pipeline: resume parsed, skills matched, fit scored, questions ready"
+                    >
+                      {pipeline.map((p, i) => (
+                        <div key={p.name} className="stage rounded-[3px] border border-line bg-bg/60 p-2.5" style={{ "--s": i } as React.CSSProperties}>
+                          <p className="font-mono text-[0.58rem] uppercase tracking-[0.16em] text-faint">0{i + 1}</p>
+                          <p className="mt-0.5 text-[0.7rem] font-semibold text-text">{p.name}</p>
+                          <div className="mt-2 h-1 overflow-hidden rounded-full bg-text/10">
+                            <div className="fillbar h-full rounded-full bg-accent" style={{ "--s": i, "--w": p.w } as React.CSSProperties} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </WorkTile>
+                <WorkTile title="AC–AC Matrix Converter" kind="Research · Verilog HDL · IEEE Xplore 2025">
+                  <div aria-hidden className="absolute inset-0 bg-[radial-gradient(70%_80%_at_50%_0%,var(--m2),transparent_70%)] opacity-55" />
+                  <div className="absolute inset-0 p-4 text-text">
+                    <Waves />
+                  </div>
+                </WorkTile>
+                <WorkTile title="More on GitHub" kind="Code · experiments · repos">
+                  <a href={links.github} target="_blank" rel="noopener noreferrer" className="group absolute inset-0 grid place-items-center">
+                    <span className="text-center">
+                      <span className="cond block text-5xl text-text transition-colors group-hover:text-accent sm:text-6xl">
+                        GitHub <Arrow />
+                      </span>
+                      <span className="mt-2 block font-mono text-[0.66rem] uppercase tracking-[0.2em] text-faint">github.com/Rishi63121</span>
+                    </span>
+                  </a>
+                </WorkTile>
+              </div>
+              <p className="mt-6 text-xs text-faint">Tiles are live or animated illustrations of how each project works, not screenshots.</p>
+            </div>
+          </section>
+
+          {/* PROJECT NOTES + LABS */}
+          <section aria-labelledby="notes" className="frame reveal p-6 sm:p-8">
+            <h2 id="notes" className="panel-title text-text">
+              Project notes
+            </h2>
+            <div className="mt-8 grid gap-10 lg:grid-cols-2">
+              <article>
+                <h3 className="cond text-3xl text-text">SAHAJ</h3>
+                <p className="mt-1 text-sm text-muted">Smart Adaptive Highway &amp; Junction</p>
+                <ul className="mt-5 space-y-3 text-[0.92rem] leading-relaxed text-muted">
+                  <li>A full-stack crowd and traffic management system that predicts real-time crowd severity levels to coordinate traffic signals.</li>
+                  <li>3-tier architecture: Spring Boot for backend services, FastAPI for a dedicated ML service, React.js for visualisation.</li>
                   <li>PostgreSQL-backed dashboard monitoring crowd density and traffic insights across junctions.</li>
                 </ul>
-                <div>
-                  <p className="eyebrow">Architecture</p>
-                  <div
-                    className="mt-4 flex flex-wrap items-center gap-2 font-mono text-xs"
-                    role="img"
-                    aria-label="Architecture: React dashboard, Spring Boot API, FastAPI ML service, PostgreSQL"
-                  >
-                    {["React.js", "Spring Boot", "FastAPI · ML", "PostgreSQL"].map((n, i, a) => (
-                      <span key={n} className="flex items-center gap-2">
-                        <span className="rounded-lg border border-line bg-surface-2 px-3 py-1.5 text-text">{n}</span>
-                        {i < a.length - 1 && <Arrow />}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="mt-5 text-sm text-faint">The tile above is a live adaptive-signal simulation. Hover it to create a crowd surge.</p>
+                <div className="mt-5 flex flex-wrap items-center gap-2 font-mono text-[0.7rem]" role="img" aria-label="Architecture: React dashboard, Spring Boot API, FastAPI ML service, PostgreSQL">
+                  {["React.js", "Spring Boot", "FastAPI · ML", "PostgreSQL"].map((n, i, a) => (
+                    <span key={n} className="flex items-center gap-2">
+                      <span className="rounded border border-line px-2.5 py-1 text-text">{n}</span>
+                      {i < a.length - 1 && <Arrow />}
+                    </span>
+                  ))}
                 </div>
-              </div>
-              <Demo label="Try the signal lab">
-                <SignalLab />
-              </Demo>
-            </article>
-
-            {/* TalentAI */}
-            <article className="reveal">
-              <Tile kind="AI-powered HR platform" title="TalentAI HRMS" sub="Human Resource Management System" href={links.talentai}>
-                <div className="grid h-full place-items-center px-5 pb-28 pt-20 sm:pb-24 sm:pt-16">
-                  <div className="grid w-full max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4" role="img" aria-label="Illustrative screening pipeline: resume parsed, skills matched, fit scored, questions generated">
-                    {pipeline.map((p, i) => (
-                      <div key={p.name} className="stage card p-4" style={{ "--s": i } as React.CSSProperties}>
-                        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-faint">0{i + 1}</p>
-                        <p className="mt-1 text-sm font-medium">{p.name}</p>
-                        <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-text/10">
-                          <div className="fillbar h-full rounded-full bg-accent" style={{ "--s": i, "--w": p.w } as React.CSSProperties} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </Tile>
-              <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
-                <ul className="space-y-4 text-lg leading-relaxed text-muted">
+                <a href={links.sahaj} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm font-medium text-accent hover:underline">
+                  View source on GitHub <Arrow />
+                </a>
+              </article>
+              <article>
+                <h3 className="cond text-3xl text-text">TalentAI HRMS</h3>
+                <p className="mt-1 text-sm text-muted">AI-powered Human Resource Management System</p>
+                <ul className="mt-5 space-y-3 text-[0.92rem] leading-relaxed text-muted">
+                  <li>Covers 5 core HR functions: recruitment, employee management, attendance, payroll and performance tracking.</li>
                   <li>
-                    Covers 5 core HR functions: recruitment, employee management, attendance, payroll and performance
-                    tracking.
-                  </li>
-                  <li>
-                    Automates 2 recruitment workflows, AI resume screening and interview question generation. Research
-                    with 100 HR professionals and recruiters in India found AI resume screening significantly
+                    Automates 2 recruitment workflows, AI resume screening and interview question generation. Research with 100 HR professionals and recruiters in India found AI resume screening significantly
                     associated with time-to-hire.
                   </li>
-                  <li>
-                    FastAPI, SQLAlchemy, SQLite and JWT authentication on the back end; responsive React.js dashboards
-                    with role-based access and analytics.
-                  </li>
+                  <li>FastAPI, SQLAlchemy, SQLite and JWT authentication on the back end; responsive React.js dashboards with role-based access and analytics.</li>
                 </ul>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {["FastAPI", "SQLAlchemy", "SQLite", "JWT", "React.js"].map((t) => (
+                    <span key={t} className="chip">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <a href={links.talentai} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm font-medium text-accent hover:underline">
+                  View source on GitHub <Arrow />
+                </a>
+              </article>
+            </div>
+
+            <div className="mt-10 space-y-6 border-t border-line pt-8">
+              <p className="eyebrow">Live labs · illustrative models, not the production systems</p>
+              <Lab label="Try the signal lab (SAHAJ)">
+                <SignalLab />
+              </Lab>
+              <Lab label="Try the screening demo (TalentAI)">
+                <ScreeningDemo />
+              </Lab>
+            </div>
+          </section>
+
+          {/* ABOUT + TOOLS */}
+          <section id="about" className="frame reveal grid lg:grid-cols-[1.05fr_1fr]">
+            <div className="border-b border-line p-6 sm:p-8 lg:border-b-0 lg:border-r">
+              <PanelTitle>About me</PanelTitle>
+              <div className="mt-8 grid gap-6 sm:grid-cols-[10.5rem_1fr]">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] border border-line-strong bg-[linear-gradient(160deg,var(--accent),var(--m2))]">
+                  <Portrait variant="square" />
+                </div>
                 <div>
-                  <p className="eyebrow">Built with</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {["FastAPI", "SQLAlchemy", "SQLite", "JWT", "React.js"].map((t) => (
-                      <span key={t} className="chip">
-                        {t}
-                      </span>
+                  <p className="text-[0.92rem] leading-relaxed text-muted">
+                    I&apos;m a Computer Science Engineering student focused on backend development, AI/ML and full-stack applications. I build REST APIs, AI-powered systems and authentication workflows with
+                    Python, FastAPI, React, SQLAlchemy and AWS.
+                  </p>
+                  <ul className="mt-4 space-y-2 text-[0.85rem] text-muted">
+                    {["B.E. CSE at The Oxford College of Engineering, CGPA 9.12", "API research & integration intern at DNAG Technologies", "1st place Oxy-Hack, 2nd place HackSetu", "Published on IEEE Xplore (2025)"].map((b) => (
+                      <li key={b} className="flex gap-2.5">
+                        <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-accent" />
+                        {b}
+                      </li>
                     ))}
-                  </div>
-                  <p className="mt-5 text-sm text-faint">The tile above is an illustrative screening pipeline.</p>
+                  </ul>
                 </div>
               </div>
-              <Demo label="Try the screening demo">
-                <ScreeningDemo />
-              </Demo>
-            </article>
-          </div>
-        </Section>
+            </div>
 
-        {/* STACK */}
-        <Section id="stack" eyebrow="Toolbox" title={<>What I reach for.</>}>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {stack.map((g) => (
-              <div key={g.group} className="card reveal p-6">
-                <h3 className="font-mono text-sm text-accent">{g.group}</h3>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {g.items.map((i) => (
-                    <li key={i} className="chip">
-                      {i}
+            <div id="stack" className="p-6 sm:p-8">
+              <PanelTitle>Tools I use</PanelTitle>
+              <ul className="mt-8 grid grid-cols-4 gap-3">
+                {tools.map((t) => (
+                  <li key={t.n} className="text-center">
+                    <span className="mini mx-auto grid size-14 place-items-center rounded-[6px] font-mono text-sm font-semibold text-text">{t.m}</span>
+                    <span className="mt-2 block text-[0.68rem] text-muted">{t.n}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 flex flex-wrap gap-1.5">
+                {alsoUse.map((a) => (
+                  <span key={a} className="chip">
+                    {a}
+                  </span>
+                ))}
+              </p>
+              <div id="recognition" className="mt-7 rounded-[3px] border border-line bg-surface-2 p-5">
+                <div className="flex items-center gap-3">
+                  <span aria-hidden className="cond text-5xl leading-[0.7] text-accent">
+                    “
+                  </span>
+                  <p className="eyebrow !text-text/80">Recognition</p>
+                </div>
+                <ul className="mt-4 space-y-4">
+                  {recognition.map((r) => (
+                    <li key={r.title} className="text-[0.82rem] leading-snug text-muted">
+                      <span className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent">{r.tag}</span>
+                      <br />
+                      <span className="text-text">{r.title}</span>
+                      <span className="text-faint"> · {r.where}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-            ))}
-          </div>
-        </Section>
+            </div>
+          </section>
 
-        {/* EXPERIENCE */}
-        <Section id="experience" eyebrow="Experience & education" title={<>Where I&apos;ve worked and learned.</>}>
-          <div className="grid gap-4 lg:grid-cols-2">
-            <article className="card reveal p-7">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-medium">API Research &amp; Integration Intern</h3>
-                  <p className="mt-1 text-muted">DNAG Technologies</p>
-                </div>
-                <span className="chip shrink-0 whitespace-nowrap">3 months</span>
-              </div>
-              <ul className="mt-6 space-y-3 text-muted">
-                <li>
-                  Researched Flipkart Seller APIs covering seller onboarding, product listing, shipment management and
-                  order processing.
-                </li>
-                <li>
-                  Tested and validated REST APIs in Postman: authentication, requests, responses, parameters and
-                  endpoint behaviour.
-                </li>
-                <li>Documented API endpoints and how they fit into business workflows.</li>
-              </ul>
-            </article>
-            <article className="card reveal p-7">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-medium">B.E. in Computer Science &amp; Engineering</h3>
-                  <p className="mt-1 text-muted">The Oxford College of Engineering</p>
-                </div>
-                <span className="chip shrink-0 whitespace-nowrap">2023 – 2027</span>
-              </div>
-              <p className="display mt-8 text-6xl text-accent">
-                9.12<span className="font-sans text-xl font-normal tracking-normal text-faint"> / 10</span>
-              </p>
-              <p className="mt-2 text-muted">Current CGPA · expected graduation 2027</p>
-            </article>
-          </div>
-        </Section>
-
-        {/* RECOGNITION */}
-        <Section id="recognition" eyebrow="Recognition" title={<>Proof it works under pressure.</>}>
-          <ol className="divide-y divide-line border-y border-line">
-            {recognition.map((r) => (
-              <li key={r.title} className="reveal grid gap-2 py-8 sm:grid-cols-[9rem_1fr_auto] sm:items-baseline sm:gap-8">
-                <span className="font-mono text-sm text-accent">{r.tag}</span>
-                <span className="text-xl font-medium leading-snug sm:text-2xl">{r.title}</span>
-                <span className="text-sm text-muted">{r.where}</span>
-              </li>
-            ))}
-          </ol>
-        </Section>
-
-        {/* CONTACT */}
-        <section id="contact" className="relative isolate overflow-hidden border-t border-line">
-          <div
-            aria-hidden
-            className="absolute inset-0 -z-10 bg-[radial-gradient(60%_80%_at_50%_120%,var(--m2),transparent_70%),radial-gradient(40%_60%_at_85%_110%,var(--m1),transparent_70%)] opacity-35"
-          />
-          <div aria-hidden className="grain absolute inset-0 -z-10 opacity-20" />
-          <div className="mx-auto max-w-6xl px-5 py-28 text-center sm:py-40">
-            <p className="eyebrow reveal">Contact</p>
-            <h2 className="display reveal mx-auto mt-5 max-w-4xl text-[clamp(2.5rem,7vw,6rem)] leading-[0.98]">
-              Have a backend or ML problem <span className="grad">worth solving?</span>
+          {/* EXPERIENCE + EDUCATION */}
+          <section id="experience" aria-labelledby="exp" className="frame reveal p-6 sm:p-8">
+            <h2 id="exp" className="panel-title text-text">
+              Experience &amp; education
             </h2>
-            <a
-              href={`mailto:${links.email}`}
-              className="reveal mt-12 inline-block break-all rounded-full bg-text px-8 py-4 font-mono text-base text-bg transition-transform hover:-translate-y-0.5 sm:text-xl"
-            >
-              {links.email}
-            </a>
-            <div className="reveal mt-8 flex flex-wrap justify-center gap-3">
-              {[
-                ["GitHub", links.github],
-                ["LinkedIn", links.linkedin],
-                ["LeetCode", links.leetcode],
-              ].map(([label, href]) => (
-                <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="glass rounded-full px-5 py-2.5 text-sm transition-colors hover:bg-text/15">
-                  {label}
-                </a>
-              ))}
-              <a href={`tel:${links.phone.replace(/\s/g, "")}`} className="glass rounded-full px-5 py-2.5 text-sm transition-colors hover:bg-text/15">
-                {links.phone}
+            <div className="mt-8 grid gap-4 lg:grid-cols-2">
+              <article className="mini rounded-[3px] p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-text">API Research &amp; Integration Intern</h3>
+                    <p className="mt-1 text-muted">DNAG Technologies</p>
+                  </div>
+                  <span className="chip shrink-0 whitespace-nowrap">3 months</span>
+                </div>
+                <ul className="mt-5 space-y-3 text-[0.9rem] leading-relaxed text-muted">
+                  <li>Researched Flipkart Seller APIs covering seller onboarding, product listing, shipment management and order processing.</li>
+                  <li>Tested and validated REST APIs in Postman: authentication, requests, responses, parameters and endpoint behaviour.</li>
+                  <li>Documented API endpoints and how they fit into business workflows.</li>
+                </ul>
+              </article>
+              <article className="mini rounded-[3px] p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-text">B.E. in Computer Science &amp; Engineering</h3>
+                    <p className="mt-1 text-muted">The Oxford College of Engineering</p>
+                  </div>
+                  <span className="chip shrink-0 whitespace-nowrap">2023 – 2027</span>
+                </div>
+                <p className="cond mt-7 text-7xl text-accent">
+                  9.12<span className="font-sans text-xl font-normal normal-case tracking-normal text-faint"> / 10</span>
+                </p>
+                <p className="mt-2 text-muted">Current CGPA · expected graduation 2027</p>
+              </article>
+            </div>
+          </section>
+
+          {/* CONTACT */}
+          <section id="contact" aria-labelledby="collab" className="frame reveal grid gap-10 p-6 sm:p-10 lg:grid-cols-[1.15fr_1fr_0.85fr] lg:items-center">
+            <div>
+              <h2 id="collab" className="panel-title text-text">
+                Let&apos;s collaborate
+              </h2>
+              <p className="mt-6 max-w-sm text-[0.92rem] leading-relaxed text-muted">Have a backend, ML or full-stack project in mind, or just want to say hi? I&apos;d love to hear from you.</p>
+              <ul className="mt-6 space-y-3 text-sm">
+                {[
+                  { icon: "mail" as IconName, label: links.email, href: `mailto:${links.email}` },
+                  { icon: "phone" as IconName, label: links.phone, href: `tel:${links.phone.replace(/\s/g, "")}` },
+                  { icon: "link" as IconName, label: "github.com/Rishi63121", href: links.github },
+                  { icon: "link" as IconName, label: "LinkedIn · Rishi Roy", href: links.linkedin },
+                ].map((c) => (
+                  <li key={c.label}>
+                    <a href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="group flex items-center gap-3 text-muted transition-colors hover:text-text">
+                      <span className="grid size-8 place-items-center rounded-full border border-line-strong text-accent transition-colors group-hover:bg-accent group-hover:text-accent-ink">
+                        <Icon name={c.icon} size={15} />
+                      </span>
+                      <span className="break-all">{c.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <a href={withBase(links.resume)} className="mt-7 inline-block rounded-full bg-text px-6 py-3 text-sm font-semibold text-bg transition-transform hover:-translate-y-0.5">
+                Download resume ↓
               </a>
             </div>
-          </div>
-        </section>
+
+            <div>
+              <p className="eyebrow mb-4 text-center">Scan to connect</p>
+              <div className="flex justify-center gap-5">
+                <QrCode url={links.linkedin} label="LinkedIn" />
+                <QrCode url={links.github} label="GitHub" />
+              </div>
+            </div>
+
+            <div className="text-center lg:text-right">
+              <svg aria-hidden viewBox="0 0 100 100" className="spin-slow mx-auto size-14 text-accent lg:ml-auto lg:mr-0" fill="currentColor">
+                <path d="M50 0 58 38 93 15 66 44 100 50 66 56 93 85 58 62 50 100 42 62 7 85 34 56 0 50 34 44 7 15 42 38Z" />
+              </svg>
+              <p className="mt-5 font-mono text-[0.78rem] italic uppercase leading-loose tracking-[0.26em] text-text/90">
+                Engineering systems.
+                <br />
+                Shipping decisions.
+              </p>
+              <p aria-hidden className="sign mt-4 -rotate-3 text-2xl text-text/90">
+                Rishi Roy
+              </p>
+            </div>
+          </section>
+        </div>
       </main>
 
       <footer className="border-t border-line">

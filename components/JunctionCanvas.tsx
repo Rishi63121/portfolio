@@ -51,7 +51,7 @@ export default function JunctionCanvas() {
     let signals: Signal[] = [];
     let spawn: Record<string, number> = {};
     const pointer = { x: -999, y: -999, on: false };
-    const colors = { text: "#fff", accent: "#fb0", go: "#4c8", stop: "#f55" };
+    const colors = { text: "#fff", accent: "#fb0", amber: "#e3a23b", go: "#4c8", stop: "#f55" };
 
     const readColors = () => {
       const s = getComputedStyle(document.documentElement);
@@ -59,6 +59,7 @@ export default function JunctionCanvas() {
       colors.accent = s.getPropertyValue("--accent").trim() || colors.accent;
       colors.go = s.getPropertyValue("--go").trim() || colors.go;
       colors.stop = s.getPropertyValue("--stop").trim() || colors.stop;
+      colors.amber = s.getPropertyValue("--amber").trim() || colors.amber;
     };
 
     const build = () => {
@@ -258,7 +259,7 @@ export default function JunctionCanvas() {
         for (const [x, y, axis] of draws) {
           const green = s.phase === axis && !s.yellow;
           const amber = s.phase === axis && s.yellow;
-          const col = green ? colors.go : amber ? colors.accent : colors.stop;
+          const col = green ? colors.go : amber ? colors.amber : colors.stop;
           ctx.globalAlpha = 0.18;
           ctx.fillStyle = col;
           ctx.beginPath();
@@ -275,7 +276,7 @@ export default function JunctionCanvas() {
       for (const c of cars) {
         const x = c.axis === "h" ? c.pos : vRoads[c.lane] + c.dir * LANE_OFFSET;
         const y = c.axis === "h" ? hRoads[c.lane] + c.dir * LANE_OFFSET : c.pos;
-        ctx.fillStyle = c.stopped > 4 ? colors.stop : c.stopped > 0.8 ? colors.accent : colors.text;
+        ctx.fillStyle = c.stopped > 4 ? colors.stop : c.stopped > 0.8 ? colors.amber : colors.text;
         ctx.globalAlpha = c.stopped > 0.8 ? 0.92 : 0.62;
         const w = c.axis === "h" ? c.len : 5;
         const h = c.axis === "h" ? 5 : c.len;

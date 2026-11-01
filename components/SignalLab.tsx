@@ -10,7 +10,7 @@ const severity = (n: number) =>
   n < 25 ? "Low" : n < 50 ? "Moderate" : n < 75 ? "High" : "Critical";
 
 const tone = (n: number) =>
-  n < 25 ? "text-go" : n < 50 ? "text-muted" : n < 75 ? "text-accent" : "text-stop";
+  n < 25 ? "text-go" : n < 50 ? "text-muted" : n < 75 ? "text-amber" : "text-stop";
 
 const presets = [
   { label: "Quiet night", ns: 8, ew: 14 },
@@ -95,12 +95,12 @@ export default function SignalLab() {
           <motion.div
             animate={{ flexGrow: nsGreen }}
             transition={spring}
-            className="grid place-items-center bg-go/90 font-mono text-sm font-medium text-accent-ink"
+            className="grid place-items-center bg-accent font-mono text-sm font-medium text-accent-ink"
             style={{ flexBasis: 0 }}
           >
             NS {nsGreen}s
           </motion.div>
-          <div className="w-1.5 bg-accent" aria-hidden />
+          <div className="w-1.5 bg-bg" aria-hidden />
           <motion.div
             animate={{ flexGrow: ewGreen }}
             transition={spring}

@@ -129,7 +129,7 @@ export default function Header() {
         ref={dialogRef}
         aria-label="Command palette"
         onClick={(e) => e.target === dialogRef.current && close()}
-        className="m-auto mt-[12vh] w-[min(92vw,560px)] overflow-hidden rounded-2xl border border-line-strong bg-[#101217] p-0 text-text shadow-2xl"
+        className="m-auto mt-[12vh] w-[min(92vw,560px)] overflow-hidden rounded-2xl border border-line-strong bg-[#140a0a] p-0 text-text shadow-2xl"
       >
         <input
           ref={inputRef}
