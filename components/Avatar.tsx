@@ -81,18 +81,18 @@ export default function Avatar({ uid = "av" }: { uid?: string }) {
 
       {/* head stage: tilts in 3D toward the pointer */}
       <div className="av-head absolute inset-0">
-        <Layer z={8} uid={uid} label="neck">
+        <Layer z={1} uid={uid} label="neck">
           <path d="M166 318V384C166 404 234 404 234 384V318Z" fill={`url(#${g("neck")})`} />
         </Layer>
 
-        <Layer z={14} uid={uid} label="ears">
+        <Layer z={2} uid={uid} label="ears">
           <ellipse cx="108" cy="212" rx="15" ry="26" fill={SKIN_SHADE} />
           <ellipse cx="110" cy="214" rx="8" ry="16" fill="#b5764f" />
           <ellipse cx="292" cy="212" rx="15" ry="26" fill={SKIN_SHADE} />
           <ellipse cx="290" cy="214" rx="8" ry="16" fill="#b5764f" />
         </Layer>
 
-        <Layer z={26} uid={uid} label="head">
+        <Layer z={3} uid={uid} label="head">
           <path d="M110 208C110 118 150 70 200 70C250 70 290 118 290 208C290 274 256 322 200 326C144 322 110 274 110 208Z" fill={`url(#${g("skin")})`} />
           <path d="M110 208C110 118 150 70 200 70C250 70 290 118 290 208C290 274 256 322 200 326C144 322 110 274 110 208Z" fill="none" stroke={`url(#${g("rim")})`} strokeWidth="5" />
           <ellipse cx="143" cy="246" rx="30" ry="22" fill={`url(#${g("blush")})`} />
@@ -100,7 +100,7 @@ export default function Avatar({ uid = "av" }: { uid?: string }) {
           <path d="M150 300C175 322 225 322 250 300C240 316 214 326 200 326C186 326 160 316 150 300Z" fill="#b87650" opacity="0.35" />
         </Layer>
 
-        <Layer z={44} uid={uid} label="face">
+        <Layer z={4} uid={uid} label="face">
           {/* brows */}
           <g fill="none" stroke="#24140f" strokeWidth="9" strokeLinecap="round">
             <path d="M136 168C148 156 174 153 189 161" />
@@ -133,14 +133,16 @@ export default function Avatar({ uid = "av" }: { uid?: string }) {
           <path d="M160 270C162 276 165 279 169 280M240 270C238 276 235 279 231 280" fill="none" stroke="#b27150" strokeWidth="3" strokeLinecap="round" opacity="0.7" />
         </Layer>
 
-        <Layer z={64} uid={uid} label="hair">
-          <path d="M98 196C88 118 128 50 205 48C278 46 316 108 302 196C298 164 286 142 264 130C240 144 192 134 160 120C140 132 118 152 108 196Z" fill={`url(#${g("hair")})`} />
-          <path d="M148 94C158 38 236 24 266 72C240 62 200 64 168 94Z" fill={`url(#${g("hair")})`} />
-          <path d="M160 70C186 52 226 52 248 66" fill="none" stroke="#6a463a" strokeOpacity="0.55" strokeWidth="5" strokeLinecap="round" />
-          <path d="M120 92C132 70 150 58 170 54" fill="none" stroke="#fff" strokeOpacity="0.08" strokeWidth="6" strokeLinecap="round" />
-          <path d="M112 172L124 218L115 220C106 202 104 186 112 172Z" fill={HAIR} />
-          <path d="M288 172L276 218L285 220C294 202 296 186 288 172Z" fill={HAIR} />
-          <path d="M98 196C88 118 128 50 205 48" fill="none" stroke={`url(#${g("rim")})`} strokeWidth="5" strokeLinecap="round" />
+        <Layer z={6} uid={uid} label="hair">
+          {/* clean cap: wraps the crown, covers both temples, sweeps into a fringe */}
+          <path
+            d="M104 218C90 124 132 46 204 44C278 42 316 120 298 218C296 186 288 160 272 146C246 156 212 150 184 134C158 142 134 164 122 204C120 212 114 216 104 218Z"
+            fill={`url(#${g("hair")})`}
+          />
+          <path d="M150 92C166 56 232 46 262 84C236 72 196 72 166 98Z" fill={`url(#${g("hair")})`} />
+          <path d="M164 68C190 54 226 54 248 68" fill="none" stroke="#6a463a" strokeOpacity="0.5" strokeWidth="5" strokeLinecap="round" />
+          <path d="M124 100C134 80 150 66 168 60" fill="none" stroke="#fff" strokeOpacity="0.08" strokeWidth="6" strokeLinecap="round" />
+          <path d="M104 218C90 124 132 46 204 44" fill="none" stroke={`url(#${g("rim")})`} strokeWidth="4" strokeLinecap="round" />
         </Layer>
       </div>
     </div>

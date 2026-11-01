@@ -8,6 +8,7 @@ import Parallax from "@/components/Parallax";
 import CountUp from "@/components/CountUp";
 import Icon, { type IconName } from "@/components/Icon";
 import Portrait from "@/components/Portrait";
+import NeuralOrb from "@/components/NeuralOrb";
 import QrCode from "@/components/QrCode";
 import Waves from "@/components/Waves";
 import { links, withBase } from "@/lib/site";
@@ -189,19 +190,17 @@ export default function Home() {
                       className="breathe absolute inset-[6%] rounded-full bg-[radial-gradient(circle_at_34%_28%,color-mix(in_srgb,var(--accent)_92%,#fff_8%),var(--m2)_78%)] shadow-[0_0_130px_-25px_var(--accent)]"
                     />
                   </div>
-                  {/* figure sits above the giant title so his head overlaps the letters */}
-                  <div className="enter absolute inset-x-0 bottom-0 top-[-16%] z-20" style={{ "--i": 3 } as React.CSSProperties}>
-                    <div className="size-full" style={{ transform: "translate(calc(var(--px,0) * 8px), calc(var(--py,0) * 5px))" }}>
-                      <div className="float h-full">
-                        <Portrait />
-                      </div>
+                  {/* live neural-network orb: turns toward the cursor and fires signals near it */}
+                  <div className="enter absolute inset-0 z-20" style={{ "--i": 3 } as React.CSSProperties}>
+                    <div className="relative size-full" role="img" aria-label="Animated neural network sphere that reacts to your cursor">
+                      <NeuralOrb />
                     </div>
                   </div>
                 </div>
 
                 {/* right: name + stats */}
                 <div className="enter relative z-20 order-2 lg:order-3" style={{ "--i": 4 } as React.CSSProperties}>
-                  <div aria-hidden className="absolute -top-10 right-0 hidden size-[7.5rem] text-text/90 lg:block">
+                  <div aria-hidden className="absolute right-0 top-2 hidden size-[6.6rem] text-text/90 lg:block">
                     <svg viewBox="0 0 120 120" className="spin-slow size-full">
                       <defs>
                         <path id="ring" d="M60 60 m-45 0 a45 45 0 1 1 90 0 a45 45 0 1 1 -90 0" />
