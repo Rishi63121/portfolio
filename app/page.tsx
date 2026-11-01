@@ -318,7 +318,7 @@ export default function Home() {
                   <h3 className="text-xl font-medium">API Research &amp; Integration Intern</h3>
                   <p className="mt-1 text-muted">DNAG Technologies</p>
                 </div>
-                <span className="chip">3 months</span>
+                <span className="chip shrink-0 whitespace-nowrap">3 months</span>
               </div>
               <ul className="mt-6 space-y-3 text-muted">
                 <li>
@@ -338,7 +338,7 @@ export default function Home() {
                   <h3 className="text-xl font-medium">B.E. in Computer Science &amp; Engineering</h3>
                   <p className="mt-1 text-muted">The Oxford College of Engineering</p>
                 </div>
-                <span className="chip">2023 – 2027</span>
+                <span className="chip shrink-0 whitespace-nowrap">2023 – 2027</span>
               </div>
               <p className="display mt-8 text-6xl text-accent">
                 9.12<span className="font-sans text-xl font-normal tracking-normal text-faint"> / 10</span>

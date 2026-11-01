@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     url: "./",
     siteName: "Rishi Roy",
   },
-  twitter: { card: "summary", title, description },
+  twitter: { card: "summary_large_image", title, description },
   robots: { index: true, follow: true },
 };
 
