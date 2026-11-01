@@ -1,26 +1,250 @@
 @import "tailwindcss";
 
+/* Tokens: space (4px grid) -> type -> colour -> depth -> states -> motion */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+  --bg: #07080b;
+  --surface: oklch(0.18 0.012 255 / 0.72);
+  --surface-2: oklch(0.24 0.014 255 / 0.7);
+  --line: oklch(1 0 0 / 0.1);
+  --line-strong: oklch(1 0 0 / 0.2);
+  --text: oklch(0.97 0.004 255);
+  --muted: oklch(0.76 0.012 255);
+  --faint: oklch(0.64 0.012 255);
+  --accent: #ffb52e;
+  --accent-ink: #0b0d12;
+  --m1: #ff9f1c;
+  --m2: #0ea5a4;
+  --m3: #4f46e5;
+  --go: oklch(0.8 0.17 155);
+  --stop: oklch(0.68 0.2 25);
+  --shadow: 0 1px 0 oklch(1 0 0 / 0.05) inset, 0 30px 60px -30px oklch(0 0 0 / 0.8);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-go: var(--go);
+  --color-stop: var(--stop);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+  background: var(--bg);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  text-wrap: pretty;
+}
+
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+.display {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.grad {
+  background: linear-gradient(95deg, var(--accent) 0%, var(--m2) 55%, var(--m3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-inline-end: 0.06em;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.glass {
+  background: oklch(0.14 0.01 255 / 0.45);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(18px);
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: var(--surface-2);
+}
+
+/* film grain over the shader */
+.grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+}
+
+/* Scroll reveal: pure CSS, content stays visible without it */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 100ms);
+  }
+}
+
+/* ticker */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* screening pipeline visual */
+@keyframes stage {
+  0%, 24%, 100% {
+    border-color: var(--line);
+    box-shadow: none;
+  }
+  6%, 18% {
+    border-color: var(--accent);
+    box-shadow: 0 0 48px -10px var(--accent);
+  }
+}
+
+@keyframes fillbar {
+  0%, 4% {
+    transform: scaleX(0);
+  }
+  14%, 100% {
+    transform: scaleX(var(--w, 0.8));
+  }
+}
+
+.stage {
+  animation: stage 8s ease-in-out infinite;
+  animation-delay: calc(var(--s) * 1.4s);
+}
+
+.fillbar {
+  transform-origin: left;
+  animation: fillbar 8s ease-out infinite;
+  animation-delay: calc(var(--s) * 1.4s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .fillbar {
+    animation: none;
+  }
+  .fillbar {
+    transform: scaleX(var(--w, 0.8));
+  }
+}
+
+dialog::backdrop {
+  background: oklch(0 0 0 / 0.55);
+  backdrop-filter: blur(6px);
+}
+
+dialog[open] {
+  animation: pop 0.18s ease-out;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] .plus {
+  transform: rotate(45deg);
+}
+
+input[type="range"] {
+  accent-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
