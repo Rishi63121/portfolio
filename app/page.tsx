@@ -117,6 +117,11 @@ export default function Home() {
   return (
     <>
       <Header />
+      {/* site-wide living background: mood-coloured flowing shader that follows the pointer */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-40 opacity-[0.7]">
+        <AuroraShader />
+      </div>
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-30 bg-[radial-gradient(120%_90%_at_50%_40%,transparent_30%,rgb(10_6_6/0.55))]" />
       <main id="top">
         {/* HERO */}
         <Parallax>
@@ -125,9 +130,6 @@ export default function Home() {
               aria-hidden
               className="absolute inset-0 -z-30 bg-[radial-gradient(70%_55%_at_70%_30%,var(--m2),transparent_70%),radial-gradient(50%_50%_at_20%_80%,var(--m1),transparent_70%)] opacity-45"
             />
-            <div className="absolute inset-0 -z-30 opacity-55 [mask-image:linear-gradient(to_bottom,black_55%,transparent)]">
-              <AuroraShader />
-            </div>
             <div aria-hidden className="grain absolute inset-0 -z-20" />
             <div
               aria-hidden
@@ -179,14 +181,17 @@ export default function Home() {
                 </div>
 
                 {/* center: red circle + portrait slot */}
-                <div className="enter order-1 mx-auto aspect-square w-[min(82vw,27rem)] lg:order-2 lg:-mt-[min(8vw,7.5rem)]" style={{ "--i": 2 } as React.CSSProperties}>
-                  <div className="relative size-full">
+                <div className="relative order-1 mx-auto aspect-square w-[min(82vw,27rem)] lg:order-2 lg:-mt-[min(8vw,7.5rem)]">
+                  <div className="enter absolute inset-0" style={{ "--i": 2 } as React.CSSProperties}>
                     <div aria-hidden className="spin-slow absolute inset-0 rounded-full border border-dashed border-line-strong" />
                     <div
                       aria-hidden
                       className="breathe absolute inset-[6%] rounded-full bg-[radial-gradient(circle_at_34%_28%,color-mix(in_srgb,var(--accent)_92%,#fff_8%),var(--m2)_78%)] shadow-[0_0_130px_-25px_var(--accent)]"
                     />
-                    <div className="absolute inset-x-0 bottom-0 top-[8%]" style={{ transform: "translate(calc(var(--px,0) * 12px), calc(var(--py,0) * 8px))" }}>
+                  </div>
+                  {/* figure sits above the giant title so his head overlaps the letters */}
+                  <div className="enter absolute inset-x-0 bottom-0 top-[-16%] z-20" style={{ "--i": 3 } as React.CSSProperties}>
+                    <div className="size-full" style={{ transform: "translate(calc(var(--px,0) * 8px), calc(var(--py,0) * 5px))" }}>
                       <div className="float h-full">
                         <Portrait />
                       </div>
@@ -428,8 +433,16 @@ export default function Home() {
             <div className="border-b border-line p-6 sm:p-8 lg:border-b-0 lg:border-r">
               <PanelTitle>About me</PanelTitle>
               <div className="mt-8 grid gap-6 sm:grid-cols-[10.5rem_1fr]">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] border border-line-strong bg-[linear-gradient(160deg,var(--accent),var(--m2))]">
-                  <Portrait variant="square" />
+                <div className="relative isolate aspect-[4/5] overflow-hidden rounded-[3px] border border-line-strong bg-[#0e0707]">
+                  <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_70%_0%,var(--m2),transparent_70%)] opacity-60" />
+                  <div
+                    aria-hidden
+                    className="breathe absolute left-1/2 top-[22%] -z-10 size-[96%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_34%_28%,color-mix(in_srgb,var(--accent)_92%,#fff_8%),var(--m2)_78%)] shadow-[0_0_70px_-18px_var(--accent)]"
+                  />
+                  <div aria-hidden className="grain absolute inset-0 -z-10 opacity-20" />
+                  <div className="absolute inset-x-0 bottom-0 top-[6%]">
+                    <Portrait variant="square" />
+                  </div>
                 </div>
                 <div>
                   <p className="text-[0.92rem] leading-relaxed text-muted">
