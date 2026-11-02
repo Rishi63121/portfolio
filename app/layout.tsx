@@ -45,7 +45,8 @@ const person = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${anton.variable} ${sign.variable} antialiased`}>
-      <body>
+      {/* suppressHydrationWarning: extensions such as Grammarly inject data-gr-* attributes into <body> before hydration */}
+      <body suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, "\\u003c") }}

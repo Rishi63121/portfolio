@@ -118,11 +118,13 @@ export default function Home() {
   return (
     <>
       <Header />
-      {/* site-wide living background: mood-coloured flowing shader that follows the pointer */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-40 opacity-[0.7]">
+      {/* site-wide living background: mood-coloured flowing shader that follows the pointer.
+          h-lvh (largest viewport) keeps the fixed layer a constant size while the iOS toolbars collapse and
+          expand, so it never resizes (and blanks) mid-scroll. */}
+      <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 -z-40 h-lvh transform-gpu bg-[radial-gradient(120%_90%_at_50%_40%,color-mix(in_srgb,var(--m2)_75%,var(--bg)),var(--bg))] opacity-[0.7]">
         <AuroraShader />
       </div>
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-30 bg-[radial-gradient(120%_90%_at_50%_40%,transparent_30%,rgb(10_6_6/0.55))]" />
+      <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 -z-30 h-lvh transform-gpu bg-[radial-gradient(120%_90%_at_50%_40%,transparent_30%,rgb(10_6_6/0.55))]" />
       <main id="top">
         {/* HERO */}
         <Parallax>

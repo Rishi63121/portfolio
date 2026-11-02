@@ -393,26 +393,71 @@ input[type="range"] {
   transform: translate(calc(var(--ax, 0) * 6px), calc(var(--ay, 0) * 4px));
 }
 
-.av-blink {
+/* Eyes: .av-eye is the eyeball (squashes shut), .av-lash is the closed-eye line (fades in as it shuts). */
+.av-eye,
+.wink-eye {
   transform-box: fill-box;
-  transform-origin: 50% 0%;
-  transform: scaleY(0);
+  transform-origin: 50% 50%;
 }
 
-@keyframes blink {
+.av-lash,
+.wink-lash {
+  opacity: 0;
+}
+
+@keyframes blink-eye {
   0%,
   93%,
   100% {
-    transform: scaleY(0);
-  }
-  95.5% {
     transform: scaleY(1);
+  }
+  96% {
+    transform: scaleY(0.01);
+  }
+}
+
+@keyframes blink-lash {
+  0%,
+  93%,
+  100% {
+    opacity: 0;
+  }
+  95%,
+  97% {
+    opacity: 1;
+  }
+}
+
+/* one eye only: close fast, hold, open */
+@keyframes wink-eye {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  22%,
+  68% {
+    transform: scaleY(0.01);
+  }
+}
+
+@keyframes wink-lash {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  18%,
+  72% {
+    opacity: 1;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .av-blink {
-    animation: blink 5.5s infinite;
+  .av-eye {
+    animation: blink-eye 5.5s infinite;
+  }
+
+  .av-lash {
+    animation: blink-lash 5.5s infinite;
   }
 
   .av-head,
@@ -420,9 +465,13 @@ input[type="range"] {
   .av-pupil {
     transition: transform 0.06s linear;
   }
-}
 
-.winking .wink {
-  animation: none;
-  transform: scaleY(1);
+  /* wink lives on its own elements so the blink animation above is never interrupted or restarted */
+  .winking .wink-eye {
+    animation: wink-eye 0.52s ease-in-out;
+  }
+
+  .winking .wink-lash {
+    animation: wink-lash 0.52s ease-in-out;
+  }
 }

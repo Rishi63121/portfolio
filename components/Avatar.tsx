@@ -106,18 +106,42 @@ export default function Avatar({ uid = "av" }: { uid?: string }) {
             <path d="M136 168C148 156 174 153 189 161" />
             <path d="M211 161C226 153 252 156 264 168" />
           </g>
-          {/* eyes */}
+          {/* eyes: the eyeball squashes shut and a lash line takes its place. Both eyes share the same
+              blink animation (on .av-eye, never swapped out, so they can't drift apart). The wink is a
+              separate layer inside the second eye (.wink-eye / .wink-lash) that a tap triggers. */}
           {[162, 238].map((cx, i) => (
             <g key={cx}>
-              <ellipse cx={cx} cy="199" rx="21" ry="14" fill="#fffdf8" />
-              <g className="av-pupil">
-                <circle cx={cx} cy="199" r="10.5" fill="#4a2c1c" />
-                <circle cx={cx} cy="199" r="6" fill="#0d0707" />
-                <circle cx={cx - 3.5} cy="195" r="2.8" fill="#fff" />
-                <circle cx={cx + 3} cy="203" r="1.4" fill="#fff" opacity="0.8" />
+              <g className="av-eye">
+                <g className={i === 1 ? "wink-eye" : undefined}>
+                <ellipse cx={cx} cy="199" rx="21" ry="14" fill="#fffdf8" />
+                <g className="av-pupil">
+                  <circle cx={cx} cy="199" r="10.5" fill="#4a2c1c" />
+                  <circle cx={cx} cy="199" r="6" fill="#0d0707" />
+                  <circle cx={cx - 3.5} cy="195" r="2.8" fill="#fff" />
+                  <circle cx={cx + 3} cy="203" r="1.4" fill="#fff" opacity="0.8" />
+                </g>
+                {/* upper lash line travels down with the lid */}
+                <path d={`M${cx - 22} 197C${cx - 13} 183 ${cx + 13} 183 ${cx + 22} 197`} fill="none" stroke="#1d0f0b" strokeWidth="4" strokeLinecap="round" />
+                </g>
               </g>
-              <ellipse cx={cx} cy="199" rx="22" ry="15" fill={SKIN} className={`av-blink ${i === 1 ? "wink" : ""}`} />
-              <path d={`M${cx - 22} 197C${cx - 13} 183 ${cx + 13} 183 ${cx + 22} 197`} fill="none" stroke="#1d0f0b" strokeWidth="4" strokeLinecap="round" />
+              <path
+                d={`M${cx - 21} 198C${cx - 11} 208 ${cx + 11} 208 ${cx + 21} 198`}
+                fill="none"
+                stroke="#1d0f0b"
+                strokeWidth="4"
+                strokeLinecap="round"
+                className="av-lash"
+              />
+              {i === 1 && (
+                <path
+                  d={`M${cx - 21} 198C${cx - 11} 208 ${cx + 11} 208 ${cx + 21} 198`}
+                  fill="none"
+                  stroke="#1d0f0b"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  className="wink-lash"
+                />
+              )}
             </g>
           ))}
           {/* nose */}

@@ -69,83 +69,134 @@ export default function AuroraShader() {
     const gl = canvas.getContext("webgl", { antialias: false, alpha: false, powerPreference: "low-power" });
     if (!gl) return;
 
-    const compile = (type: number, src: string) => {
-      const s = gl.createShader(type)!;
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
-    };
-    const vs = compile(gl.VERTEX_SHADER, VERT);
-    const fs = compile(gl.FRAGMENT_SHADER, FRAG);
-    if (!vs || !fs) return;
-    const prog = gl.createProgram()!;
-    gl.attachShader(prog, vs);
-    gl.attachShader(prog, fs);
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
-    gl.useProgram(prog);
-
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const loc = gl.getAttribLocation(prog, "p");
-    gl.enableVertexAttribArray(loc);
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-    const u = (n: string) => gl.getUniformLocation(prog, n);
-    const uRes = u("uRes");
-    const uTime = u("uTime");
-    const uMouse = u("uMouse");
-    const uC = [u("uC1"), u("uC2"), u("uC3")];
-    gl.uniform3fv(u("uBg"), hexToRgb(BG_HEX));
-
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const current = document.documentElement.getAttribute("data-mood");
     const start = moods.find((m) => m.id === current) ?? moods[0];
     let target: RGB[] = start.c.map(hexToRgb) as RGB[];
     const cols: RGB[] = target.map((c) => [...c] as RGB);
     const mouse = { x: 0.5, y: 0.55, tx: 0.5, ty: 0.55 };
+    let time = 14;
 
-    const resize = () => {
-      const r = host.getBoundingClientRect();
-      const scale = Math.min(window.devicePixelRatio || 1, 1.5) * 0.55;
-      canvas.width = Math.max(2, Math.round(r.width * scale));
-      canvas.height = Math.max(2, Math.round(r.height * scale));
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform2f(uRes, canvas.width, canvas.height);
+    // GL resources. Built once, and rebuilt if the browser drops the context (iOS Safari does this
+    // under memory pressure or while the tab is backgrounded; without a rebuild the canvas stays black).
+    let ready = false;
+    let uRes: WebGLUniformLocation | null = null;
+    let uTime: WebGLUniformLocation | null = null;
+    let uMouse: WebGLUniformLocation | null = null;
+    let uC: (WebGLUniformLocation | null)[] = [];
+
+    const compile = (type: number, src: string) => {
+      const s = gl.createShader(type)!;
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
     };
 
-    const draw = (time: number) => {
+    const build = () => {
+      ready = false;
+      const vs = compile(gl.VERTEX_SHADER, VERT);
+      const fs = compile(gl.FRAGMENT_SHADER, FRAG);
+      if (!vs || !fs) return;
+      const prog = gl.createProgram()!;
+      gl.attachShader(prog, vs);
+      gl.attachShader(prog, fs);
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+      gl.useProgram(prog);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, "p");
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+      const u = (n: string) => gl.getUniformLocation(prog, n);
+      uRes = u("uRes");
+      uTime = u("uTime");
+      uMouse = u("uMouse");
+      uC = [u("uC1"), u("uC2"), u("uC3")];
+      gl.uniform3fv(u("uBg"), hexToRgb(BG_HEX));
+      ready = true;
+    };
+
+    const draw = () => {
+      if (!ready || gl.isContextLost()) return;
       gl.uniform1f(uTime, time);
       gl.uniform2f(uMouse, mouse.x, mouse.y);
       cols.forEach((c, i) => gl.uniform3f(uC[i], c[0], c[1], c[2]));
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
+    // Resizing a canvas wipes its buffer, and an opaque (alpha:false) buffer wipes to black. So only
+    // resize when the size really changed, and always repaint in the same task, before the browser
+    // gets a chance to present the cleared frame.
+    const resize = () => {
+      const r = host.getBoundingClientRect();
+      const scale = Math.min(window.devicePixelRatio || 1, 1.5) * 0.55;
+      const w = Math.max(2, Math.round(r.width * scale));
+      const h = Math.max(2, Math.round(r.height * scale));
+      const changed = w !== canvas.width || h !== canvas.height;
+      if (changed) {
+        canvas.width = w;
+        canvas.height = h;
+      }
+      // Always (re)apply viewport + resolution to the current program: a freshly built program (React
+      // strict-mode remount, or a restored context) has no resolution yet even if the canvas size is unchanged.
+      if (!ready || gl.isContextLost()) return;
+      gl.viewport(0, 0, w, h);
+      gl.uniform2f(uRes, w, h);
+      if (changed) draw();
+    };
+
+    const onLost = (e: Event) => {
+      e.preventDefault(); // tells the browser we can handle a restore
+      ready = false;
+      // A lost, opaque canvas paints black. Hide it so the CSS fallback gradient on the host shows instead.
+      canvas.style.visibility = "hidden";
+    };
+    const onRestored = () => {
+      build();
+      resize();
+      draw();
+      canvas.style.visibility = "visible";
+    };
+    canvas.addEventListener("webglcontextlost", onLost);
+    canvas.addEventListener("webglcontextrestored", onRestored);
+
     const onMood = (e: Event) => {
       const m = (e as CustomEvent<Mood>).detail;
       target = m.c.map(hexToRgb) as RGB[];
       if (reduced) {
         target.forEach((c, i) => (cols[i] = [...c] as RGB));
-        draw(14);
+        draw();
       }
     };
     window.addEventListener("mood", onMood);
 
+    // Coming back to the tab: repaint immediately instead of waiting for the next animation frame.
+    const onVisible = () => {
+      if (!document.hidden) draw();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("pageshow", onVisible);
+
+    build();
     resize();
-    const ro = new ResizeObserver(() => {
-      resize();
-      if (reduced) draw(14);
-    });
+    draw();
+    const ro = new ResizeObserver(resize);
     ro.observe(host);
 
-    if (reduced) {
-      draw(14);
-      return () => {
-        window.removeEventListener("mood", onMood);
-        ro.disconnect();
-      };
-    }
+    const cleanupBase = () => {
+      ro.disconnect();
+      canvas.removeEventListener("webglcontextlost", onLost);
+      canvas.removeEventListener("webglcontextrestored", onRestored);
+      window.removeEventListener("mood", onMood);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("pageshow", onVisible);
+    };
+
+    if (reduced) return cleanupBase;
 
     const onMove = (e: PointerEvent) => {
       const r = canvas.getBoundingClientRect();
@@ -154,32 +205,28 @@ export default function AuroraShader() {
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
+    // The host is position:fixed and always on screen, so there is no IntersectionObserver gate here:
+    // iOS reports fixed layers as non-intersecting mid-scroll, which used to pause drawing and leave
+    // a stale or black frame.
     let raf = 0;
-    let visible = true;
     const t0 = performance.now();
     const loop = (now: number) => {
       raf = requestAnimationFrame(loop);
-      if (!visible || document.hidden) return;
+      if (document.hidden) return;
       mouse.x += (mouse.tx - mouse.x) * 0.05;
       mouse.y += (mouse.ty - mouse.y) * 0.05;
       cols.forEach((c, i) => {
         for (let k = 0; k < 3; k++) c[k] += (target[i][k] - c[k]) * 0.06;
       });
-      draw((now - t0) / 1000 + 6);
+      time = (now - t0) / 1000 + 6;
+      draw();
     };
     raf = requestAnimationFrame(loop);
 
-    const io = new IntersectionObserver(([e]) => {
-      visible = e.isIntersecting;
-    });
-    io.observe(host);
-
     return () => {
       cancelAnimationFrame(raf);
-      ro.disconnect();
-      io.disconnect();
-      window.removeEventListener("mood", onMood);
       window.removeEventListener("pointermove", onMove);
+      cleanupBase();
     };
   }, []);
 
