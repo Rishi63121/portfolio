@@ -13,5 +13,6 @@ export const links = {
   leetcode: "https://leetcode.com/u/Yb3TN9TGz9/",
   sahaj: "https://github.com/Rishi63121/SAHAJ-V2",
   talentai: "https://github.com/Rishi63121/TALENTAI-HRMS",
+  talentaiLive: "https://talentai-hrms.vercel.app",
   resume: "/Rishi_Roy_Resume.pdf",
 } as const;

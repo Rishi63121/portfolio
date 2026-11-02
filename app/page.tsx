@@ -79,7 +79,7 @@ function Arrow() {
   );
 }
 
-function WorkTile({ title, kind, href, children }: { title: string; kind: string; href?: string; children: React.ReactNode }) {
+function WorkTile({ title, kind, href, liveHref, children }: { title: string; kind: string; href?: string; liveHref?: string; children: React.ReactNode }) {
   return (
     <article className="reveal">
       <div className="tile relative aspect-[16/10] overflow-hidden rounded-[3px]">{children}</div>
@@ -88,10 +88,19 @@ function WorkTile({ title, kind, href, children }: { title: string; kind: string
           <h3 className="text-[0.82rem] font-semibold uppercase tracking-wide text-text">{title}</h3>
           <p className="mt-0.5 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-faint">{kind}</p>
         </div>
-        {href && (
-          <a href={href} target="_blank" rel="noopener noreferrer" className="shrink-0 text-xs font-medium text-accent hover:underline">
-            GitHub <Arrow />
-          </a>
+        {(href || liveHref) && (
+          <div className="flex shrink-0 gap-4">
+            {liveHref && (
+              <a href={liveHref} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-accent hover:underline">
+                Live demo <Arrow />
+              </a>
+            )}
+            {href && (
+              <a href={href} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-accent hover:underline">
+                GitHub <Arrow />
+              </a>
+            )}
+          </div>
         )}
       </div>
     </article>
@@ -327,7 +336,7 @@ export default function Home() {
                   <div aria-hidden className="absolute inset-0 bg-[radial-gradient(70%_80%_at_80%_10%,var(--m2),transparent_70%)] opacity-60" />
                   <JunctionCanvas />
                 </WorkTile>
-                <WorkTile title="TalentAI HRMS" kind="AI-powered HR platform" href={links.talentai}>
+                <WorkTile title="TalentAI HRMS" kind="AI-powered HR platform" href={links.talentai} liveHref={links.talentaiLive}>
                   <div aria-hidden className="absolute inset-0 bg-[radial-gradient(70%_80%_at_20%_100%,var(--m2),transparent_70%)] opacity-60" />
                   <div className="absolute inset-0 grid place-items-center p-4">
                     <div
@@ -412,9 +421,14 @@ export default function Home() {
                     </span>
                   ))}
                 </div>
-                <a href={links.talentai} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm font-medium text-accent hover:underline">
-                  View source on GitHub <Arrow />
-                </a>
+                <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
+                  <a href={links.talentaiLive} target="_blank" rel="noopener noreferrer" className="inline-block text-sm font-medium text-accent hover:underline">
+                    Live demo <Arrow />
+                  </a>
+                  <a href={links.talentai} target="_blank" rel="noopener noreferrer" className="inline-block text-sm font-medium text-accent hover:underline">
+                    View source on GitHub <Arrow />
+                  </a>
+                </div>
               </article>
             </div>
 
