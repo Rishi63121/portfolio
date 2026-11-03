@@ -14,5 +14,6 @@ export const links = {
   sahaj: "https://github.com/Rishi63121/SAHAJ-V2",
   talentai: "https://github.com/Rishi63121/TALENTAI-HRMS",
   talentaiLive: "https://talentai-hrms.vercel.app",
+  krusharushiLive: "https://krusharushi.me/",
   resume: "/Rishi_Roy_Resume.pdf",
 } as const;

@@ -17,7 +17,7 @@ const ticker = ["Python", "FastAPI", "React", "Spring Boot", "PostgreSQL", "scik
 
 const stats = [
   { v: 9.12, d: 2, l: "CGPA", icon: "cap" as IconName },
-  { v: 2, d: 0, l: "Flagship systems", icon: "layers" as IconName },
+  { v: 3, d: 0, l: "Flagship systems", icon: "layers" as IconName },
   { v: 2, d: 0, l: "Hackathon podiums", icon: "trophy" as IconName },
 ];
 
@@ -298,7 +298,7 @@ export default function Home() {
                     <Icon name={w.icon} size={26} />
                   </span>
                   <h3 className="mt-5 text-[0.74rem] font-semibold uppercase tracking-wide text-text">{w.t}</h3>
-                  <p className="mt-2 text-[0.78rem] leading-relaxed text-muted">{w.d}</p>
+                  <p className="mt-2 text-[0.78rem] leading-relaxed text-muted text-justify hyphens-none">{w.d}</p>
                 </li>
               ))}
             </ul>
@@ -317,7 +317,7 @@ export default function Home() {
                     </span>
                     <div>
                       <h3 className="text-[0.78rem] font-semibold uppercase tracking-wide text-text">{p.t}</h3>
-                      <p className="mt-1 text-[0.8rem] leading-relaxed text-muted">{p.d}</p>
+                      <p className="mt-1 text-[0.8rem] leading-relaxed text-muted text-justify hyphens-none">{p.d}</p>
                     </div>
                   </li>
                 ))}
@@ -362,15 +362,21 @@ export default function Home() {
                     <Waves />
                   </div>
                 </WorkTile>
-                <WorkTile title="More on GitHub" kind="Code · experiments · repos">
-                  <a href={links.github} target="_blank" rel="noopener noreferrer" className="group absolute inset-0 grid place-items-center">
-                    <span className="text-center">
-                      <span className="cond block text-5xl text-text transition-colors group-hover:text-accent sm:text-6xl">
-                        GitHub <Arrow />
-                      </span>
-                      <span className="mt-2 block font-mono text-[0.66rem] uppercase tracking-[0.2em] text-faint">github.com/Rishi63121</span>
-                    </span>
-                  </a>
+<WorkTile title="Federated Learning · Parkinson's" kind="Final-year project · Privacy-preserving ML" liveHref={links.krusharushiLive}>
+                  <div aria-hidden className="absolute inset-0 bg-[radial-gradient(70%_80%_at_50%_100%,var(--m2),transparent_70%)] opacity-60" />
+                  <svg viewBox="0 0 320 200" className="absolute inset-0 size-full p-4 text-text" role="img" aria-label="Three hospital clients train locally with differential-privacy noise and send only model updates to a central FedAvg server">
+                    {[40, 100, 160].map((y, i) => (
+                      <g key={y}>
+                        <line x1="96" y1={y} x2="214" y2="100" stroke="var(--accent)" strokeWidth="1.2" className="fl-flow" style={{ "--s": i } as React.CSSProperties} />
+                        <rect x="14" y={y - 16} width="82" height="32" rx="3" fill="none" stroke="currentColor" strokeOpacity="0.35" />
+                        <text x="55" y={y - 2} textAnchor="middle" fontSize="9" fill="currentColor" fontFamily="monospace">Client {i + 1}</text>
+                        <text x="55" y={y + 10} textAnchor="middle" fontSize="7.5" fill="var(--accent)" fontFamily="monospace" className="fl-noise" style={{ "--s": i } as React.CSSProperties}>DP-SGD + noise</text>
+                      </g>
+                    ))}
+                    <rect x="214" y="72" width="92" height="56" rx="3" fill="none" stroke="var(--accent)" className="fl-server" />
+                    <text x="260" y="97" textAnchor="middle" fontSize="10" fill="currentColor" fontFamily="monospace">FedAvg</text>
+                    <text x="260" y="111" textAnchor="middle" fontSize="7.5" fill="currentColor" fillOpacity="0.6" fontFamily="monospace">weights only</text>
+                  </svg>
                 </WorkTile>
               </div>
               <p className="mt-6 text-xs text-faint">Tiles are live or animated illustrations of how each project works, not screenshots.</p>
@@ -386,7 +392,7 @@ export default function Home() {
               <article>
                 <h3 className="cond text-3xl text-text">SAHAJ</h3>
                 <p className="mt-1 text-sm text-muted">Smart Adaptive Highway &amp; Junction</p>
-                <ul className="mt-5 space-y-3 text-[0.92rem] leading-relaxed text-muted">
+                <ul className="mt-5 space-y-3 text-[0.92rem] leading-relaxed text-muted text-justify hyphens-none">
                   <li>A full-stack crowd and traffic management system that predicts real-time crowd severity levels to coordinate traffic signals.</li>
                   <li>3-tier architecture: Spring Boot for backend services, FastAPI for a dedicated ML service, React.js for visualisation.</li>
                   <li>PostgreSQL-backed dashboard monitoring crowd density and traffic insights across junctions.</li>
@@ -406,7 +412,7 @@ export default function Home() {
               <article>
                 <h3 className="cond text-3xl text-text">TalentAI HRMS</h3>
                 <p className="mt-1 text-sm text-muted">AI-powered Human Resource Management System</p>
-                <ul className="mt-5 space-y-3 text-[0.92rem] leading-relaxed text-muted">
+                <ul className="mt-5 space-y-3 text-[0.92rem] leading-relaxed text-muted text-justify hyphens-none">
                   <li>Covers 5 core HR functions: recruitment, employee management, attendance, payroll and performance tracking.</li>
                   <li>
                     Automates 2 recruitment workflows, AI resume screening and interview question generation. Research with 100 HR professionals and recruiters in India found AI resume screening significantly
@@ -427,6 +433,28 @@ export default function Home() {
                   </a>
                   <a href={links.talentai} target="_blank" rel="noopener noreferrer" className="inline-block text-sm font-medium text-accent hover:underline">
                     View source on GitHub <Arrow />
+                  </a>
+                </div>
+              </article>
+              <article>
+                <h3 className="cond text-3xl text-text">Federated Learning for Parkinson&apos;s Detection</h3>
+                <p className="mt-1 text-sm text-muted">Privacy-preserving voice screening · final-year project, team of four</p>
+                <ul className="mt-5 space-y-3 text-[0.92rem] leading-relaxed text-muted text-justify hyphens-none">
+                  <li>Detects Parkinson&apos;s from voice using 21 live-extractable acoustic features (jitter, shimmer, harmonicity) from the Istanbul University dataset (756 recordings, 252 patients).</li>
+                  <li>A PyTorch MLP trained with Flower FedAvg across three simulated clients, with per-client DP-SGD via Opacus at six noise levels, evaluated on a patient-disjoint test set.</li>
+                  <li>Finding: the privacy–utility trade-off is a round-by-round recoverability gradient. At moderate noise (σ 0.5–0.8) AUC recovers to about 0.68 against 0.69 without DP; at σ 1.5 (ε ≈ 1.13) it never recovers.</li>
+                  <li>Federation is simulated on a single machine, as the paper states explicitly. The trained model also powers a live voice-recording demo.</li>
+                </ul>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {["PyTorch", "Flower", "Opacus", "Differential privacy", "FedAvg"].map((t) => (
+                    <span key={t} className="chip">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
+                  <a href={links.krusharushiLive} target="_blank" rel="noopener noreferrer" className="inline-block text-sm font-medium text-accent hover:underline">
+                    Live demo <Arrow />
                   </a>
                 </div>
               </article>
@@ -460,7 +488,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div>
-                  <p className="text-[0.92rem] leading-relaxed text-muted">
+                  <p className="text-[0.92rem] leading-relaxed text-muted text-justify hyphens-none">
                     I&apos;m a Computer Science Engineering student focused on backend development, AI/ML and full-stack applications. I build REST APIs, AI-powered systems and authentication workflows with
                     Python, FastAPI, React, SQLAlchemy and AWS.
                   </p>
@@ -556,7 +584,7 @@ export default function Home() {
               <h2 id="collab" className="panel-title text-text">
                 Let&apos;s collaborate
               </h2>
-              <p className="mt-6 max-w-sm text-[0.92rem] leading-relaxed text-muted">Have a backend, ML or full-stack project in mind, or just want to say hi? I&apos;d love to hear from you.</p>
+              <p className="mt-6 max-w-sm text-[0.92rem] leading-relaxed text-muted text-justify hyphens-none">Have a backend, ML or full-stack project in mind, or just want to say hi? I&apos;d love to hear from you.</p>
               <ul className="mt-6 space-y-3 text-sm">
                 {[
                   { icon: "mail" as IconName, label: links.email, href: `mailto:${links.email}` },

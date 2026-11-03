@@ -311,6 +311,46 @@ body {
   animation-delay: var(--d, 0s);
 }
 
+@keyframes flow {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+
+@keyframes noise {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes serverPulse {
+  0%,
+  100% {
+    filter: none;
+  }
+  50% {
+    filter: drop-shadow(0 0 8px var(--accent));
+  }
+}
+
+.fl-flow {
+  stroke-dasharray: 4 4;
+  animation: flow 0.8s linear infinite;
+}
+
+.fl-noise {
+  animation: noise 1.6s ease-in-out infinite;
+  animation-delay: calc(var(--s) * 0.4s);
+}
+
+.fl-server {
+  animation: serverPulse 2.4s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -319,7 +359,10 @@ body {
   .marquee-track,
   .stage,
   .fillbar,
-  .wave {
+  .wave,
+  .fl-flow,
+  .fl-noise,
+  .fl-server {
     animation: none;
   }
 
